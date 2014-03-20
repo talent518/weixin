@@ -43,14 +43,14 @@ $data = array(
 					"url" => "http://www.soso.com/"
 				), 
 				array(
-					"type" => "view", 
+					"type" => "click", 
 					"name" => "考试", 
-					"url" => getRedirectUrl('exam.php', 1)
+					"key" => "exam"
 				), 
 				array(
-					"type" => "view", 
+					"type" => "click", 
 					"name" => "投票", 
-					"url" => getRedirectUrl('vote.php', 1)
+					"key" => "vote"
 				), 
 				array(
 					"type" => "view", 
