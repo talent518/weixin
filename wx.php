@@ -51,8 +51,8 @@ if ( $revEvent ) {
 				case 'exam':
 					$data = array(
 						array(
-							'title' => '【考试】您对新行员培训还满意吗？', 
-							'description' => '您还在等什么，赶快来参与吧，参与有奖哦！', 
+							'title' => '【考试】调查问卷', 
+							'description' => '上学的成绩如何！', 
 							'picUrl' => 'http://news.xinhuanet.com/politics/2014-03/18/119829558_13951512652051n.jpg', 
 							'url' => 'http://tw.we-ideas.com/exam.php'
 						)

@@ -1,13 +1,14 @@
 <?php
-require './WeixinChat.php';
-
-$weixin = new WeixinChat('wx27ee3c1eb97bf28e', '699375c9eb11e5bbad86d43e75bfcc62', 'weixin');
 
 function getRedirectUrl ( $url, $scope = 0 ) {
 	global $weixin;
 	
 	return $weixin->getOauthCode('http://tw.we-ideas.com/redirect.php?redirectUrl=' . urlencode($url), $scope);
 }
+
+require './WeixinChat.php';
+
+$weixin = new WeixinChat('wx27ee3c1eb97bf28e', '699375c9eb11e5bbad86d43e75bfcc62', 'weixin');
 
 $data = array(
 	"button" => array(
