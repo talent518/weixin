@@ -39,16 +39,11 @@ $list = array(
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black" />
 <title>【考试】内向者如何转身变社交达人</title>
+<script type="text/javascript" src="jquery.min.js"></script>
 <style type="text/css">
 form {
 	line-height: 30px;
 	font-size: 14px;
-}
-
-label {
-	display: inline-block;
-	width: 5em;
-	text-align: right;
 }
 
 .image {
@@ -85,6 +80,21 @@ label {
 	font-size: 12px;
 	line-height: 15px;
 }
+form{width:100%;}
+form button{
+	display:none;
+	height: 45px;
+	padding: 0 20px;
+	border-radius: 5px;
+	background: #06c;
+	line-height: 45px;
+	color: white;
+	font-size: 20px;
+	font-weight: bold;
+	text-decoration: none;
+	border:none;
+}
+.fright{float:right;}
 </style>
 </head>
 <body>
@@ -96,17 +106,34 @@ if ( isset($_GET['index']) ) :
 		$prefix=isset($_POST['answers'])?$_POST['answers'].',':null;
 		?>
 		<form action="exam.php?index=<?php echo $_GET['index']+1;?>" method="post">
-		<h2><?php echo $question['title'];?></h2>
+		<div><span class="fright">当前第<?php echo $_GET['index']+1;?>题</span>共<?php echo count($list);?>题</div>
+			<h2><?php echo $question['title'];?></h2>
 		<?php foreach($question['options'] as $i=>$title):?>
-		<p>
-			<input name="answers" type="radio" value="<?php echo $prefix,$i;?>" />
-			 <label><?php echo $title;?></label>
-		</p>
+			<p>
+				<input id="answer-<?php echo $i;?>" name="answers" type="radio" value="<?php echo $prefix,$i;?>" />
+				<label for="answer-<?php echo $i;?>"><?php echo $title;?></label>
+			</p>
 		<?php endforeach;?>
+			<button type="submit"><?php echo $_GET['index']+1==count($list)?'答题完毕，交卷':'下一题';?></button>
 		</form>
-		
+		<script type="text/javascript">
+		$('form input').click(function(){
+			$('button').show();
+		});
+		</script>
 	 <?php else :?>
-	 
+	 	<div class="result">
+	 		<h2>【考试】内向者如何转身变社交达人</h2>
+	 		<?php
+	 		$count=0;
+	 		foreach(explode(',', $_POST['answers']) as $key=>$val):
+	 			if($list[$key]['answer']==$val+1):
+	 				$count++;
+	 			endif;
+	 		endforeach;
+	 		?>
+	 		<p>共<?php echo count($list);?>题,答对<?php echo $count;?>题。</p>
+	 	</div>
 	<?php endif;
  else :
 	?>
@@ -119,7 +146,7 @@ if ( isset($_GET['index']) ) :
 		<span>2014-3-1 ~ 2014-12-31</span>
 	</div>
 	<p>
-		规则说明：<br />本次练习内容为金融类测试，请遵守以上规则：<br />1、答题时请保持安静；<br />2.答题完毕后，请根据答题完提示一下题的操作。
+		规则说明：<br />本次练习内容为金融类测试，请遵守以上规则：<br />1、答题时请保持安静；<br />2、答题完毕后，请根据答题完提示一下题的操作。
 	</p>
 <?php endif;?>
 </body>
