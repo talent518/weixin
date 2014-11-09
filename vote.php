@@ -10,17 +10,17 @@ $options=array(
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="Cache-Control" content="no-cache" />
-<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=3.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta content="telephone=no" name="format-detection" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black" />
 <title>【投票】您对新行员培训还满意吗？</title>
 <script type="text/javascript" src="jquery.min.js"></script>
 <style type="text/css">
-h2{font-size:20px;}
+body{font-size: 14px;}
+h2{font-size:18px;font-weight:bold;}
 form {
 	line-height: 30px;
-	font-size: 14px;
 }
 form button{
 	display:none;
@@ -30,13 +30,15 @@ form button{
 	background: #06c;
 	line-height: 45px;
 	color: white;
-	font-size: 20px;
+	font-size: 18px;
 	font-weight: bold;
 	text-decoration: none;
 	border:none;
 }
 form p{border:1px white solid;}
 form .selected{border-color:#06c;}
+form input{width:30px;height:30px;display:inline-block;font-size:14px;}
+.result dt{padding-bottom:5px;}
 .result dd{margin:0px;position:relative;height:20px;line-height:20px;background:#ccc;}
 .result dd span{position:absolute;left:0px;top:0px;height:100%;background:#06c;}
 .result dd label{display:block;position:relative;text-align:center;}

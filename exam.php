@@ -34,16 +34,17 @@ $list = array(
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="Cache-Control" content="no-cache" />
-<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=3.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta content="telephone=no" name="format-detection" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black" />
 <title>【考试】内向者如何转身变社交达人</title>
 <script type="text/javascript" src="jquery.min.js"></script>
 <style type="text/css">
+body{font-size:14px;line-height:20px;}
+h2{font-size:18px;font-weight:bold;}
 form {
 	line-height: 30px;
-	font-size: 14px;
 }
 
 .image {
@@ -94,12 +95,13 @@ form button{
 	text-decoration: none;
 	border:none;
 }
+form p{border:1px white solid;}
+form .selected{border-color:#06c;}
 .fright{float:right;}
 </style>
 </head>
 <body>
 <?php
-
 if ( isset($_GET['index']) ) :
 	if ( isset($list[$_GET['index']]) ) :
 		$question = $list[$_GET['index']];
@@ -117,7 +119,10 @@ if ( isset($_GET['index']) ) :
 			<button type="submit"><?php echo $_GET['index']+1==count($list)?'答题完毕，交卷':'下一题';?></button>
 		</form>
 		<script type="text/javascript">
+		var $p=$('form p');
 		$('form input').click(function(){
+			$p.removeClass('selected');
+			$(this).parent().addClass('selected');
 			$('button').show();
 		});
 		</script>
@@ -139,15 +144,18 @@ if ( isset($_GET['index']) ) :
 	?>
 	<h2>【考试】内向者如何转身变社交达人</h2>
 	<p>2013-12-10&nbsp;&nbsp;</p>
-	<p class="image">1+1=?</p>
+	<img src="http://news.xinhuanet.com/politics/2014-03/18/119829558_13951512652051n.jpg" width="100%" height="80"/>
 	<div class="btn-begin">
 		<a href="exam.php?index=0">开始答题</a>
 		<p>练习时间</p>
 		<span>2014-3-1 ~ 2014-12-31</span>
 	</div>
-	<p>
-		规则说明：<br />本次练习内容为金融类测试，请遵守以上规则：<br />1、答题时请保持安静；<br />2、答题完毕后，请根据答题完提示一下题的操作。
-	</p>
+	<p>规则说明：</p>
+	<p>本次练习内容为金融类测试，请遵守以上规则：</p>
+	<div style="padding-left:2em;">
+		<p>1、答题时请保持安静；</p>
+		<p>2、答题完毕后，请根据答题完提示一下题的操作。</p>
+	</div>
 <?php endif;?>
 </body>
 </html>
