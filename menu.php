@@ -3,12 +3,12 @@
 function getRedirectUrl ( $url, $scope = 0 ) {
 	global $weixin;
 	
-	return $weixin->getOauthCode('http://124.74.197.227/weixin/abao/redirect.php?redirectUrl=' . urlencode($url), $scope);
+	return $weixin->getOauthCode('redirect.php?redirectUrl=' . urlencode($url), $scope);
 }
 
 require './WeixinChat.php';
 
-$weixin = new WeixinChat('wx27ee3c1eb97bf28e', '699375c9eb11e5bbad86d43e75bfcc62', 'weixin');
+$weixin = new WeixinChat();
 
 $data = array(
 	"button" => array(

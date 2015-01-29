@@ -1,7 +1,7 @@
 <?php
 require './WeixinChat.php';
 
-$weixin = new WeixinChat('wx27ee3c1eb97bf28e', '699375c9eb11e5bbad86d43e75bfcc62', 'weixin');
+$weixin = new WeixinChat();
 $weixin->getRev();
 
 $revEvent = $weixin->getRevEvent();

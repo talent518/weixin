@@ -12,11 +12,13 @@ define('CACHE_FILE', FILE_NAME . '.cache');
  */
 class WeixinChat {
 
-	private $token;
-
 	private $appid;
 
 	private $appsecret;
+
+	private $token;
+
+	private $baseurl;
 
 	private $access_token;
 	
@@ -90,10 +92,13 @@ class WeixinChat {
 	 *
 	 * @param array $options
 	 */
-	public function __construct ( $appid = null, $appsecret = null, $token = null ) {
+	public function __construct () {
+		include('./config.php');
+
+		$this->appid = $appId;
+		$this->appsecret = $appSecret;
 		$this->token = $token;
-		$this->appid = $appid;
-		$this->appsecret = $appsecret;
+		$this->baseurl = $baseurl;
 	}
 
 	/**
@@ -656,7 +661,7 @@ class WeixinChat {
 	 */
 	public function getOauthCode ( $redirect_uri, $scope = 0, $state = '' ) {
 		$scope = ( $scope == 0 ) ? 'snsapi_base' : 'snsapi_userinfo';
-		return self::CONNECT_OAUTH_AUTHORIZE_URL . 'appid=' . $this->appid . '&redirect_uri=' . urlencode($redirect_uri) . '&response_type=code&scope=' .
+		return self::CONNECT_OAUTH_AUTHORIZE_URL . 'appid=' . $this->appid . '&redirect_uri=' . urlencode($this->baseurl.$redirect_uri) . '&response_type=code&scope=' .
 				 $scope . '&state=' . $state . '#wechat_redirect';
 	}
 
