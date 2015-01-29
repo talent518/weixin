@@ -3,7 +3,7 @@
 function getRedirectUrl ( $url, $scope = 0 ) {
 	global $weixin;
 	
-	return $weixin->getOauthCode('http://tw.we-ideas.com/redirect.php?redirectUrl=' . urlencode($url), $scope);
+	return $weixin->getOauthCode('http://124.74.197.227/weixin/abao/redirect.php?redirectUrl=' . urlencode($url), $scope);
 }
 
 require './WeixinChat.php';

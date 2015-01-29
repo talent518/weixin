@@ -42,7 +42,7 @@ if ( $revEvent ) {
 							'title' => '【投票】您对新行员培训还满意吗？', 
 							'description' => '您还在等什么，赶快来参与吧，参与有奖哦！', 
 							'picUrl' => 'http://news.xinhuanet.com/politics/2014-03/18/119829558_13951512652051n.jpg', 
-							'url' => 'http://tw.we-ideas.com/vote.php'
+							'url' => 'http://124.74.197.227/weixin/abao/vote.php'
 						)
 					);
 					shuffle($data);
@@ -54,7 +54,7 @@ if ( $revEvent ) {
 							'title' => '【考试】调查问卷', 
 							'description' => '上学的成绩如何！', 
 							'picUrl' => 'http://news.xinhuanet.com/politics/2014-03/18/119829558_13951512652051n.jpg', 
-							'url' => 'http://tw.we-ideas.com/exam.php'
+							'url' => 'http://124.74.197.227/weixin/abao/exam.php'
 						)
 					);
 					shuffle($data);
@@ -77,9 +77,9 @@ if ( $revEvent ) {
 	}
 } else {
 	$randString = array(
-		'习近平：干部要把焦裕禄精神作镜子照照自己', 
-		'马官方：机长副机长曾飞过北边走廊地带航线', 
-		'深度分析：京东零售O2O的潜在风险'
+		'习近平：干部要把焦裕禄精神作镜子照照自己-abao', 
+		'马官方：机长副机长曾飞过北边走廊地带航线-abao', 
+		'深度分析：京东零售O2O的潜在风险-abao'
 	);
 	$weixin->text($randString[rand() % 3]);
 }
