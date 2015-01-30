@@ -2,6 +2,7 @@
 require './WeixinChat.php';
 
 $weixin = new WeixinChat();
+$weixin->valid();
 $weixin->getRev();
 
 $revEvent = $weixin->getRevEvent();

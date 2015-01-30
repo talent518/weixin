@@ -51,6 +51,9 @@ class WeixinChat {
 	// 请求api前缀
 	const API_URL_PREFIX = 'https://api.weixin.qq.com/cgi-bin';
 	
+	// 请求文件上传下载前缀
+	const FILE_API_URL_PREFIX = 'https://file.api.weixin.qq.com/cgi-bin';
+	
 	// 自定义菜单创建
 	const MENU_CREATE_URL = '/menu/create?';
 	
@@ -86,6 +89,12 @@ class WeixinChat {
 	
 	// 创建二维码ticket
 	const QRCODE_CREATE_URL = '/qrcode/create?';
+	
+	// 文件上传
+	const MEDIA_UPLOAD_URL = '/media/upload?';
+	
+	// 文件下载
+	const MEDIA_DOWNLOAD_URL = '/media/get?';
 
 	/**
 	 * 初始化配置数据
@@ -98,7 +107,7 @@ class WeixinChat {
 		$this->appid = $appId;
 		$this->appsecret = $appSecret;
 		$this->token = $token;
-		$this->baseurl = $baseurl;
+		$this->baseurl = $baseUrl;
 	}
 
 	/**
@@ -555,6 +564,62 @@ class WeixinChat {
 	}
 
 	/**
+	 * 文件上传
+	 *
+	 * @param string $openid 用户唯一标识符
+	 * @param int $to_groupid 分组id
+	 */
+	public function uploadMedia ( $file, $type='image' ) {
+		if (  ! $this->access_token &&  ! $this->checkAuth() )
+			return false;
+		
+		$file = realpath($file);
+		
+		if(!$file){
+			return false;
+		}
+		
+		$data = array(
+			'media' => function_exists('curl_file_create')?curl_file_create($file):'@'.$file, 
+		);
+		
+		$result = curlRequest(self::FILE_API_URL_PREFIX . self::MEDIA_UPLOAD_URL . 'access_token=' . $this->access_token.'&type='.$type, $data);
+		
+		if ( $result ) {
+			$jsonArr = json_decode($result, true);
+			if (  ! $jsonArr || ( isset($jsonArr['errcode']) && $jsonArr['errcode'] > 0 ) )
+				$this->error($jsonArr);
+			else
+				return $jsonArr;
+		}else
+			return false;
+	}
+
+	/**
+	 * 文件下载
+	 *
+	 * @param string $openid 用户唯一标识符
+	 * @param int $to_groupid 分组id
+	 */
+	public function downloadMedia ( $file, $media_id ) {
+		if (  ! $this->access_token &&  ! $this->checkAuth() )
+			return false;
+		
+		$result = curlRequest(self::FILE_API_URL_PREFIX . self::MEDIA_DOWNLOAD_URL . 'access_token=' . $this->access_token.'&media_id='.$media_id, false, 'get');
+		if ( $result ) {
+			if($result{0}!=='{'){
+				return file_put_contents($file, $result);
+			}
+			$jsonArr = json_decode($result, true);
+			if (  ! $jsonArr || ( isset($jsonArr['errcode']) && $jsonArr['errcode'] > 0 ) )
+				$this->error($jsonArr);
+			else
+				return true;
+		}else
+			return false;
+	}
+
+	/**
 	 * 发送客服消息
 	 * 当用户主动发消息给公众号的时候（包括发送信息、点击自定义菜单clike事件、订阅事件、扫描二维码事件、支付成功事件、用户维权），
 	 * 微信将会把消息数据推送给开发者，开发者在一段时间内（目前为24小时）可以调用客服消息接口，通过POST一个JSON数据包来发送消息给普通用户，在24小时内不限制发送次数。
@@ -608,9 +673,8 @@ class WeixinChat {
 				$this->error($jsonArr);
 			else
 				return true;
-		}
-		
-		return false;
+		}else
+			return false;
 	}
 
 	/**
@@ -645,8 +709,8 @@ class WeixinChat {
 				)));
 				return true;
 			}
-		}
-		return false;
+		}else
+			return false;
 	}
 
 	/**
@@ -680,9 +744,8 @@ class WeixinChat {
 				$this->error($jsonArr);
 			else
 				return $jsonArr;
-		}
-		
-		return false;
+		}else
+			return false;
 	}
 
 	/**
@@ -701,9 +764,8 @@ class WeixinChat {
 				$this->error($jsonArr);
 			else
 				return $jsonArr;
-		}
-		
-		return false;
+		}else
+			return false;
 	}
 
 	/**
@@ -721,9 +783,8 @@ class WeixinChat {
 				$this->error($jsonArr);
 			else
 				return $jsonArr;
-		}
-		
-		return false;
+		}else
+			return false;
 	}
 
 	/**
@@ -756,9 +817,8 @@ class WeixinChat {
 				$this->error($jsonArr);
 			else
 				return $jsonArr;
-		}
-		
-		return false;
+		}else
+			return false;
 	}
 
 	/**
@@ -857,8 +917,13 @@ class WeixinChat {
 	 * 验证token是否有效
 	 */
 	public function valid () {
-		if ( $this->checkSignature() )
+		if(file_exists('./valid.lock')){
+			return ;
+		}
+		if ( $this->checkSignature() ){
+			touch('./valid.lock');
 			exit($_GET['echostr']);
+		}
 	}
 
 }
@@ -879,6 +944,7 @@ function curlRequest ( $url, $data = '', $method = 'POST', $cookieFile = '', $he
 	
 	$option = array(
 		CURLOPT_URL => $url, 
+		CURLOPT_VERBOSE => 0, 
 		CURLOPT_HEADER => 0, 
 		CURLOPT_RETURNTRANSFER => 1, 
 		CURLOPT_CONNECTTIMEOUT => $connectTimeout, 
@@ -893,7 +959,7 @@ function curlRequest ( $url, $data = '', $method = 'POST', $cookieFile = '', $he
 		$option[CURLOPT_COOKIEFILE] = $cookieFile;
 	}
 	
-	if ( $data && strtolower($method) == 'post' ) {
+	if ( $data && $method == 'POST' ) {
 		$option[CURLOPT_POST] = 1;
 		$option[CURLOPT_POSTFIELDS] = $data;
 	}
@@ -901,6 +967,12 @@ function curlRequest ( $url, $data = '', $method = 'POST', $cookieFile = '', $he
 	if ( stripos($url, 'https://') !== false ) {
 		$option[CURLOPT_SSL_VERIFYPEER] = false;
 		$option[CURLOPT_SSL_VERIFYHOST] = false;
+	}
+	
+	if(HTTP_PROXY && HTTP_PROXYPORT){
+		$option[CURLOPT_PROXY]=HTTP_PROXY;
+		$option[CURLOPT_PROXYPORT]=HTTP_PROXYPORT;
+		$option[CURLOPT_PROXYTYPE]=CURLPROXY_HTTP;
 	}
 	
 	$ch = curl_init();
