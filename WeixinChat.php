@@ -12,13 +12,13 @@ define('CACHE_FILE', FILE_NAME . '.cache');
  */
 class WeixinChat {
 
-	private $appid;
+	private $appId;
 
-	private $appsecret;
+	private $appSecret;
 
 	private $token;
 
-	private $baseurl;
+	private $baseUrl;
 
 	private $access_token;
 	
@@ -103,15 +103,10 @@ class WeixinChat {
 	 */
 	public function __construct () {
 		include('./config.php');
-
-		$this->appid = $appId;
-		$this->appsecret = $appSecret;
-		$this->token = $token;
-		$this->baseurl = $baseUrl;
 	}
 
 	public function getBaseUrl() {
-		return $this->baseurl;
+		return $this->baseUrl;
 	}
 
 	/**
@@ -698,7 +693,7 @@ class WeixinChat {
 		}
 		
 		// 请求微信服务器获取access_token
-		$result = curlRequest(self::API_URL_PREFIX . self::AUTH_URL . 'appid=' . $this->appid . '&secret=' . $this->appsecret);
+		$result = curlRequest(self::API_URL_PREFIX . self::AUTH_URL . 'appid=' . $this->appId . '&secret=' . $this->appSecret);
 		if ( $result ) {
 			$jsonArr = json_decode($result, true);
 			if (  ! $jsonArr || ( isset($jsonArr['errcode']) && $jsonArr['errcode'] > 0 ) ) {
@@ -729,7 +724,7 @@ class WeixinChat {
 	 */
 	public function getOauthCode ( $redirect_uri, $scope = 0, $state = '' ) {
 		$scope = ( $scope == 0 ) ? 'snsapi_base' : 'snsapi_userinfo';
-		return self::CONNECT_OAUTH_AUTHORIZE_URL . 'appid=' . $this->appid . '&redirect_uri=' . urlencode($this->baseurl.$redirect_uri) . '&response_type=code&scope=' .
+		return self::CONNECT_OAUTH_AUTHORIZE_URL . 'appid=' . $this->appId . '&redirect_uri=' . urlencode($this->baseUrl.$redirect_uri) . '&response_type=code&scope=' .
 				 $scope . '&state=' . $state . '#wechat_redirect';
 	}
 
@@ -740,7 +735,7 @@ class WeixinChat {
 	 */
 	public function getSnsAccessToken ( $code ) {
 		$result = curlRequest(
-				self::SNS_OAUTH_ACCESS_TOKEN_URL . 'appid=' . $this->appid . '&secret=' . $this->appsecret . '&code=' . $code .
+				self::SNS_OAUTH_ACCESS_TOKEN_URL . 'appid=' . $this->appId . '&secret=' . $this->appSecret . '&code=' . $code .
 						 '&grant_type=authorization_code');
 		if ( $result ) {
 			$jsonArr = json_decode($result, true);
@@ -761,7 +756,7 @@ class WeixinChat {
 	 */
 	public function refershToken ( $refresh_token ) {
 		$result = curlRequest(
-				self::SNS_OAUTH_REFRESH_TOKEN_URL . 'appid=' . $this->appid . '&grant_type=refresh_token&refresh_token=' . $refresh_token);
+				self::SNS_OAUTH_REFRESH_TOKEN_URL . 'appid=' . $this->appId . '&grant_type=refresh_token&refresh_token=' . $refresh_token);
 		if ( $result ) {
 			$jsonArr = json_decode($result, true);
 			if (  ! $jsonArr || ( isset($jsonArr['errcode']) && $jsonArr['errcode'] > 0 ) )
