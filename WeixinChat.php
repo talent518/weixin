@@ -110,6 +110,10 @@ class WeixinChat {
 		$this->baseurl = $baseUrl;
 	}
 
+	public function getBaseUrl() {
+		return $this->baseurl;
+	}
+
 	/**
 	 * 获取发来的消息
 	 * 当普通微信用户向公众账号发消息时，微信服务器将POST消息的XML数据包到开发者填写的URL上。

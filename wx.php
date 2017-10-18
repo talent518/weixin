@@ -43,7 +43,7 @@ if ( $revEvent ) {
 							'title' => '【投票】您对新行员培训还满意吗？', 
 							'description' => '您还在等什么，赶快来参与吧，参与有奖哦！', 
 							'picUrl' => 'http://news.xinhuanet.com/politics/2014-03/18/119829558_13951512652051n.jpg', 
-							'url' => 'http://124.74.197.227/weixin/abao/vote.php'
+							'url' => $weixin->getBaseUrl() . 'vote.php'
 						)
 					);
 					shuffle($data);
@@ -55,7 +55,7 @@ if ( $revEvent ) {
 							'title' => '【考试】调查问卷', 
 							'description' => '上学的成绩如何！', 
 							'picUrl' => 'http://news.xinhuanet.com/politics/2014-03/18/119829558_13951512652051n.jpg', 
-							'url' => 'http://124.74.197.227/weixin/abao/exam.php'
+							'url' => $weixin->getBaseUrl() . 'exam.php'
 						)
 					);
 					shuffle($data);
