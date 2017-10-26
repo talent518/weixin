@@ -75,6 +75,9 @@ if ( $revEvent ) {
 			break;
 		case 'unsubscribe': // 取消关注
 			break;
+		case 'scan':
+			$weixin->text('scene_id: ' . $key);
+			break;
 	}
 } else {
 	$randString = array(

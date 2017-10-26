@@ -25,6 +25,11 @@ $data = array(
 					"type" => "view", 
 					"name" => "个人信息", 
 					"url" => getRedirectUrl('userinfo.php', 1)
+				), 
+				array(
+					"type" => "view", 
+					"name" => "二维码", 
+					"url" => getRedirectUrl('qrcode.php', 1)
 				)
 			), 
 			"key" => "ucenter"
