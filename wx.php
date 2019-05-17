@@ -71,7 +71,7 @@ if ( $revEvent ) {
 		             // $weixin->sendCustomMessage($weixin->getRevFrom(), $content);
 			break;
 		case 'subscribe': // 关注
-			$weixin->text('欢迎光临！');
+			$weixin->text('欢迎光临！' . strtr($key, ['qrscene_'=>'']));
 			break;
 		case 'unsubscribe': // 取消关注
 			break;

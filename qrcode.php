@@ -14,10 +14,10 @@
 
 	$weixin = new WeixinChat();
 
-	$json = $weixin->createQrcode(rand());
+	$json = $weixin->createQrcode($rnd = rand());
 
 	if(isset($json['ticket'])) {
-		echo '<img src="', $weixin->getQrcodeUrl($json['ticket']), '"/>';
+		echo '<img src="', $weixin->getQrcodeUrl($json['ticket']), '"/>', $rnd;
 	} else {
 		echo 'createQrcode ERROR';
 	}
