@@ -96,6 +96,9 @@ class WeixinChat {
 	// 文件下载
 	const MEDIA_DOWNLOAD_URL = '/media/get?';
 
+	// 获取微信服务器IP地址
+	const GET_CALLBACK_IP = '/getcallbackip?';
+
 	/**
 	 * 初始化配置数据
 	 *
@@ -724,8 +727,7 @@ class WeixinChat {
 	 */
 	public function getOauthCode ( $redirect_uri, $scope = 0, $state = '' ) {
 		$scope = ( $scope == 0 ) ? 'snsapi_base' : 'snsapi_userinfo';
-		return self::CONNECT_OAUTH_AUTHORIZE_URL . 'appid=' . $this->appId . '&redirect_uri=' . urlencode($this->baseUrl.$redirect_uri) . '&response_type=code&scope=' .
-				 $scope . '&state=' . $state . '#wechat_redirect';
+		return self::CONNECT_OAUTH_AUTHORIZE_URL . 'appid=' . $this->appId . '&redirect_uri=' . urlencode($this->baseUrl.$redirect_uri) . '&response_type=code&scope=' . $scope . '&state=' . $state . '#wechat_redirect';
 	}
 
 	/**
@@ -734,9 +736,7 @@ class WeixinChat {
 	 * @param string $code
 	 */
 	public function getSnsAccessToken ( $code ) {
-		$result = curlRequest(
-				self::SNS_OAUTH_ACCESS_TOKEN_URL . 'appid=' . $this->appId . '&secret=' . $this->appSecret . '&code=' . $code .
-						 '&grant_type=authorization_code');
+		$result = curlRequest(self::SNS_OAUTH_ACCESS_TOKEN_URL . 'appid=' . $this->appId . '&secret=' . $this->appSecret . '&code=' . $code . '&grant_type=authorization_code');
 		if ( $result ) {
 			$jsonArr = json_decode($result, true);
 			if (  ! $jsonArr || ( isset($jsonArr['errcode']) && $jsonArr['errcode'] > 0 ) )
@@ -755,8 +755,7 @@ class WeixinChat {
 	 * @param string $refresh_token 填写通过access_token获取到的refresh_token参数
 	 */
 	public function refershToken ( $refresh_token ) {
-		$result = curlRequest(
-				self::SNS_OAUTH_REFRESH_TOKEN_URL . 'appid=' . $this->appId . '&grant_type=refresh_token&refresh_token=' . $refresh_token);
+		$result = curlRequest(self::SNS_OAUTH_REFRESH_TOKEN_URL . 'appid=' . $this->appId . '&grant_type=refresh_token&refresh_token=' . $refresh_token);
 		if ( $result ) {
 			$jsonArr = json_decode($result, true);
 			if (  ! $jsonArr || ( isset($jsonArr['errcode']) && $jsonArr['errcode'] > 0 ) )
@@ -808,14 +807,28 @@ class WeixinChat {
 		if ( $type == 0 )
 			$data['expire_seconds'] = $expire;
 		
-		$result = curlRequest(self::API_URL_PREFIX . self::QRCODE_CREATE_URL . 'access_token=' . $this->access_token, $this->jsonEncode($data), 
-				'post');
+		$result = curlRequest(self::API_URL_PREFIX . self::QRCODE_CREATE_URL . 'access_token=' . $this->access_token, $this->jsonEncode($data), 'post');
 		if ( $result ) {
 			$jsonArr = json_decode($result, true);
 			if (  ! $jsonArr || ( isset($jsonArr['errcode']) && $jsonArr['errcode'] > 0 ) )
 				$this->error($jsonArr);
 			else
 				return $jsonArr;
+		}else
+			return false;
+	}
+
+	public function getCallbackIP() {
+		if (  ! $this->access_token &&  ! $this->checkAuth() )
+			return false;
+
+		$result = curlRequest(self::API_URL_PREFIX . self::GET_CALLBACK_IP . 'access_token=' . $this->access_token);
+		if ( $result ) {
+			$jsonArr = json_decode($result, true);
+			if (  ! $jsonArr || ( isset($jsonArr['errcode']) && $jsonArr['errcode'] > 0 ) )
+				$this->error($jsonArr);
+			else
+				return isset($jsonArr['ip_list']) ? $jsonArr['ip_list'] : [];
 		}else
 			return false;
 	}
