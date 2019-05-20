@@ -688,7 +688,7 @@ class WeixinChat {
 		
 		// 从缓存中获取access_token
 		if ( file_exists(CACHE_FILE) ) {
-			list ( $access_token, $expire ) = file_get_contents(CACHE_FILE);
+			list ( $access_token, $expire ) = unserialize(file_get_contents(CACHE_FILE));
 		}
 		if ( $access_token && $expire && ( filemtime(CACHE_FILE) + $expire ) > TIMESTAMP ) {
 			$this->access_token = $access_token;
